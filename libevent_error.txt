@@ -1,0 +1,16 @@
+1. 原因: 程序运行时动态链接库找不到
+./test_signal.out: error while loading shared libraries: libevent-2.2.so.1: cannot open shared object file: No such file or directory
+
+
+解决方法: 网上搜索
+# whereis libevent-2.2.so.1
+'libevent-2.2.so: /usr/local/lib/libevent-2.2.so.1
+
+# ldd test_signal.out
+	linux-vdso.so.1 =>  (0x00007fffc815c000)
+	libevent-2.2.so.1 => not found
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb8ec186000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fb8ec550000)
+# sudo ln -s /usr/local/lib/libevent-2.2.so.1 /lib/x86_64-linux-gnu/libevent-2.2.so.1
+
+问题解决

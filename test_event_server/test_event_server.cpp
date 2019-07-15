@@ -9,6 +9,15 @@
 
 void client_cb(evutil_socket_t s, short w, void *arg)
 {
+    event *ev = (event *)arg;
+
+    if(w&EV_TIMEOUT)
+    {
+        printf("timeout\n");
+        event_free(ev);
+        evutil_closesocket(s);
+        return;         
+    }
     char buf[1024] = {0};
     int len = recv(s, buf, sizeof(buf)-1, 0);
     if(len > 0)
@@ -18,14 +27,10 @@ void client_cb(evutil_socket_t s, short w, void *arg)
     }
     else
     {
-        event *ev = (event *)arg;
         printf("event_free\n");
         event_free(ev);
         evutil_closesocket(s);
-       
     }
-    
-
 }
 
 void listen_cb(evutil_socket_t s, short w, void *arg)
